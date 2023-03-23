@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
-public class Comentario implements Serializable {
+public class Queja implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,27 +21,22 @@ public class Comentario implements Serializable {
     private Integer codigo;
 
     @NotNull
-    @Lob
     @Column(nullable = false)
-    private String mensaje;
+    private LocalDateTime fechaPublicacion;
 
     @NotNull
+    @Lob
     @Column(nullable = false)
-    private LocalDateTime fechaCreacion;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Producto producto;
+    private String descripcion;
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private Usuario usuario;
 
     @Builder
-    public Comentario(String mensaje, Producto producto, Usuario usuario) {
-    this.mensaje = mensaje;
-    this.producto = producto;
-    this.usuario = usuario;
-    this.fechaCreacion = LocalDateTime.now();
+    public Queja(String descripcion, Usuario usuario) {
+        this.descripcion = descripcion;
+        this.usuario = usuario;
+        this.fechaPublicacion = LocalDateTime.now();
     }
 }
