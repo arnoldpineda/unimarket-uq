@@ -33,10 +33,5 @@ public class Queja implements Serializable {
     @JoinColumn(nullable = false)
     private Usuario usuario;
 
-    @Builder
-    public Queja(String descripcion, Usuario usuario) {
-        this.descripcion = descripcion;
-        this.usuario = usuario;
-        this.fechaPublicacion = LocalDateTime.now();
-    }
+
 }

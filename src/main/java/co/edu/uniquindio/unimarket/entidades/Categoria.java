@@ -3,5 +3,8 @@ package co.edu.uniquindio.unimarket.entidades;
 public enum Categoria {
 
     MODA,
-    DEPORTES
+    DEPORTES,
+    MASCOTAS,
+    JUEGOS,
+    MUSICA
 }
