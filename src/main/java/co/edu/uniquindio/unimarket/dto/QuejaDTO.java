@@ -9,17 +9,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ComentarioDTO {
+public class QuejaDTO {
 
     @NotNull
     @NotBlank
-    private String mensaje;
+    private String Descripcion;
 
     @NotNull
     @NotBlank
     private int codigoUsuario;
-
-    @NotNull
-    @NotBlank
-    private int codigoProducto;
 }
+
+

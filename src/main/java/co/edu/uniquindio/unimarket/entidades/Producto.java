@@ -79,25 +79,13 @@ public class Producto implements Serializable {
 
     @ManyToOne
     @JoinColumn (nullable = false)
-    private Usuario usuario;
+    private Usuario vendedor;
 
     //Lista favorito
-    @ManyToMany
-    //@JoinTable (name = "favoritos")
+    @ManyToMany(mappedBy = "favoritos")
     private List<Usuario> usuarios;
 
-    @Builder
-    public Producto(Integer codigo, String nombre, Integer unidades, String descripcion, float precio, Usuario usuario, Map<String, String> imagen, List<Categoria> categoria) {
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.unidades = unidades;
-        this.descripcion = descripcion;
-        this.precio = precio;
-        this.usuario = usuario;
-        this.activo = false;
-        this.fechaCreado = LocalDateTime.now();
-        this.fechaLimite = fechaCreado;
-        this.imagen = imagen;
-        this.categoria = categoria;
-    }
+
+    //Quitar todos los constructores
+
 }

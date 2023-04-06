@@ -33,7 +33,7 @@ public class Usuario extends Persona implements Serializable{
     private List<Compra> compras;
 
     @ToString.Exclude
-    @OneToMany (mappedBy = "usuario")
+    @OneToMany (mappedBy = "vendedor")
     private List<Producto> productos;
 
     @ToString.Exclude
@@ -41,7 +41,8 @@ public class Usuario extends Persona implements Serializable{
     private List<Comentario> comentarios;
 
     //Lista favorito
-    @ManyToMany (mappedBy = "usuarios")
+    @ManyToMany
+    @JoinTable (name = "favoritos")
     private List<Producto> favoritos;
 
     @ToString.Exclude

@@ -7,19 +7,20 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Getter
 @Setter
 public class ProductoGetDTO {
     private int codigo;
-    private boolean estado;
+    private boolean activo;
     private LocalDateTime fechaLimite;
     private String nombre;
     private String descripcion;
     private int unidades;
     private float precio;
     private int codigoVendedor;
-    private List<String> imagenes;
+    private Map<String, String> imagenes;
     private List<Categoria> categorias;
 }
