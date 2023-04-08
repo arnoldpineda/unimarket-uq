@@ -36,9 +36,9 @@ public class ProductoServicioImpl implements ProductoServicio {
         producto.setVendedor( usuarioServicio.obtener( productoDTO.getCodigoVendedor() ) );
         producto.setImagen( productoDTO.getImagenes() );
         producto.setCategoria( productoDTO.getCategorias() );
-        producto.setActivo(productoDTO.isActivo()); // se puede cambiar por una enumeracion
+        producto.setActivo(false); // Se crea como falso es decir inactivo, se puede cambiar por una enumeracion
         producto.setFechaCreado( LocalDateTime.now() );
-        producto.setFechaLimite( LocalDateTime.now().plusDays(60) );
+        producto.setFechaLimite( LocalDateTime.now().plusDays(60) ); //Fecha limite es 3 meses despues de crearce
 
         return productoRepo.save( producto ).getCodigo();
     }
@@ -218,7 +218,7 @@ public class ProductoServicioImpl implements ProductoServicio {
 
     private Producto convertirDTO(ProductoDTO productoDTO) throws Exception {
         Producto producto = new Producto();
-            producto.setActivo(productoDTO.isActivo());
+            //producto.setActivo(productoDTO.isActivo());
             producto.setNombre(productoDTO.getNombre());
             producto.setDescripcion(productoDTO.getDescripcion());
             producto.setUnidades(productoDTO.getUnidades());

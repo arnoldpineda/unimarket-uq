@@ -104,5 +104,6 @@ public class UsuarioTest {
     @Sql("classpath:dataset.sql")
     public void enviarEmailTest() throws Exception{
         emailServicio.enviarEmail(new EmailDTO("Prueba", "Esta es una prueba", "jmllantenm@uqvirtual.edu.co"));
+        //Se verifica en el correo, asunto y mensaje ok
     }
 }

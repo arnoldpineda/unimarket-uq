@@ -1,6 +1,6 @@
 insert into usuario values (1, "pepitoperez@email.com", "Pepito Perez", "a1b2", "Cra 53", "3141111111");
 insert into usuario values (2, "florinda@email.com", "Florinda Florez", "c3d4", "Cll 25", "3152222222");
-insert into usuario values (3, "juanlopez@email.com", "Juan Lopez", "e5f6", "Cra 29", "3143333333");
+insert into usuario values (3, "jmllantenm@uqvirtual.edu.co", "Juan Lopez", "e5f6", "Cra 29", "3143333333");
 insert into usuario values (4, "anamejia@email.com", "Ana Mejia", "g7h8", "Cll 13", "3144444444");
 insert into usuario values (5, "pedromolina@email.com", "Pedro Molina", "i9j0", "Cra 19", "3146666666");
 

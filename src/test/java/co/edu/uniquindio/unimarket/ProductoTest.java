@@ -50,14 +50,13 @@ public class ProductoTest {
         Map<String, String> imagenes = new HashMap<>();
         imagenes.put("http://www.google.com/images/imagenasus.png","1");
 
-        //Se crea el producto y se usa el código dado por el servicio de registro de usuario para asignar el vendedor
+        //Se crea el producto y se asigna el codigo vendedor registrado en la BD
         ProductoDTO productoDTO = new ProductoDTO(
                 "Computador Asus 1",
                 "Es el mejor computador portatil que el dinero pueda comprar",
                 5,
                 7000000,
                 codigoVendedor,
-                false,
                 imagenes,
                 List.of(Categoria.DEPORTES)
         );
@@ -76,7 +75,7 @@ public class ProductoTest {
         Map<String, String> imagenes = new HashMap<>();
         imagenes.put("http://www.google.com/images/imagenasus.png","1");
 
-        ProductoGetDTO productoActualizado = productoServicio.actualizarProducto(1, new ProductoDTO("camisa", "camisa de hombre", 13,25000, 1, true, imagenes, List.of(Categoria.MODA))) ;
+        ProductoGetDTO productoActualizado = productoServicio.actualizarProducto(1, new ProductoDTO("camisa", "camisa de hombre", 13,25000, 1, imagenes, List.of(Categoria.MODA))) ;
 
         //Se comprueba que ahora el nombre del producto no es el mismo inicial
         Assertions.assertNotEquals("Blusa", productoActualizado.getNombre());

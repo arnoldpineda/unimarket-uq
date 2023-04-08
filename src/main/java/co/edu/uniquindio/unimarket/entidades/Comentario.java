@@ -37,11 +37,12 @@ public class Comentario implements Serializable {
     @JoinColumn(nullable = false)
     private Usuario usuario;
 
-    @Builder
+    //Quitar los constructores
+    /*@Builder
     public Comentario(String mensaje, Producto producto, Usuario usuario) {
     this.mensaje = mensaje;
     this.producto = producto;
     this.usuario = usuario;
     this.fechaCreacion = LocalDateTime.now();
-    }
+    }*/
 }
