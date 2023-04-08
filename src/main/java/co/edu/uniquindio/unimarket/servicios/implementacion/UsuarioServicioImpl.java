@@ -73,13 +73,12 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     }
 
     private UsuarioGetDTO convertir(Usuario usuario){
-        UsuarioGetDTO usuarioDTO = new UsuarioGetDTO(
+        return new UsuarioGetDTO(
             usuario.getCodigo(),
             usuario.getNombre(),
             usuario.getEmail(),
             usuario.getDireccion(),
             usuario.getTelefono());
-        return usuarioDTO;
     }
     private Usuario convertirDTO(UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();
