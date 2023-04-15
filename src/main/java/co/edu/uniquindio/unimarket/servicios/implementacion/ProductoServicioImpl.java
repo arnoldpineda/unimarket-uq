@@ -7,6 +7,8 @@ import co.edu.uniquindio.unimarket.entidades.Estado;
 import co.edu.uniquindio.unimarket.entidades.Producto;
 import co.edu.uniquindio.unimarket.entidades.Usuario;
 import co.edu.uniquindio.unimarket.repositorios.ProductoRepo;
+import co.edu.uniquindio.unimarket.servicios.excepcion.ListaVaciaException;
+import co.edu.uniquindio.unimarket.servicios.excepcion.ObjetoNoEncontradoException;
 import co.edu.uniquindio.unimarket.servicios.interfaces.ProductoServicio;
 import co.edu.uniquindio.unimarket.servicios.interfaces.UsuarioServicio;
 import lombok.AllArgsConstructor;
@@ -36,7 +38,7 @@ public class ProductoServicioImpl implements ProductoServicio {
         producto.setVendedor( usuarioServicio.obtener( productoDTO.getCodigoVendedor() ) );
         producto.setImagen( productoDTO.getImagenes() );
         producto.setCategoria( productoDTO.getCategorias() );
-        producto.setActivo(false); // Se crea como falso es decir inactivo, se puede cambiar por una enumeracion
+        producto.setActivo(Estado.SIN_REVISAR); // Se crea como SIN_REVISAR es decir inactivo
         producto.setFechaCreado( LocalDateTime.now() );
         producto.setFechaLimite( LocalDateTime.now().plusDays(60) ); //Fecha limite es 3 meses despues de crearce
 
@@ -63,15 +65,15 @@ public class ProductoServicioImpl implements ProductoServicio {
         return producto.getUnidades();
     }
 
+    //Cambia el estado de un producto cuando el moderador lo revisa
     @Override
     public int actualizarEstado(int codigoProducto, Estado estado) throws Exception {
         validarProductoExiste(codigoProducto); //validar que el codigo del producto exista
 
         Producto producto = obtener(codigoProducto);
-        //producto.setActivo(estado);
-        return 0;
+        producto.setActivo(estado);
+        return codigoProducto;
     }
-
 
     @Override
     public int eliminarProducto(int codigoProducto) throws Exception {
@@ -93,7 +95,7 @@ public class ProductoServicioImpl implements ProductoServicio {
         Optional<Producto> producto = productoRepo.findById(codigoProducto);
 
         if(producto.isEmpty()){
-            throw new Exception("El código "+codigoProducto+" no está asociado a ningún producto");
+            throw new ObjetoNoEncontradoException("El código "+codigoProducto+" no está asociado a ningún producto");
         }
         return producto.get();
     }
@@ -103,7 +105,7 @@ public class ProductoServicioImpl implements ProductoServicio {
         List<Producto> lista = productoRepo.listarProductosUsuario(codigoUsuario);
 
         if(lista.isEmpty()){
-            throw new Exception("El usuario no tiene productos");
+            throw new ListaVaciaException("El usuario no tiene productos");
         }
 
         List<ProductoGetDTO> respuesta = new ArrayList<>();
@@ -120,7 +122,7 @@ public class ProductoServicioImpl implements ProductoServicio {
         List<Producto> lista = productoRepo.listarProductoCategoria(categoria);
 
         if(lista.isEmpty()) {
-            throw new Exception("No hay producto en la categoria " + categoria);
+            throw new ObjetoNoEncontradoException("No hay producto en la categoria " + categoria);
         }
 
         List<ProductoGetDTO> respuesta = new ArrayList<>();
@@ -132,9 +134,37 @@ public class ProductoServicioImpl implements ProductoServicio {
         return respuesta;
     }
 
+    //Lista si los producto autorizados, Denegados Sin revisar, los Autorizados son los que se deben mostrar en la pag inicio
     @Override
-    public List<ProductoGetDTO> listarProductosPorEstado(Estado estado) {
-        return null;
+    public List<ProductoGetDTO> listarProductosPorEstado(Estado estado) throws Exception {
+        List<Producto> lista = productoRepo.listarProductosEstado(estado);
+
+        if(lista.isEmpty()) {
+            throw new ObjetoNoEncontradoException("No hay productos con estado " + estado);
+        }
+
+        List<ProductoGetDTO> respuesta = new ArrayList<>();
+
+        for(Producto p : lista){
+            respuesta.add( convertir(p) );
+        }
+        return respuesta;
+    }
+
+    @Override
+    public List<ProductoGetDTO> listarProductosEstadoModerador(int codigoModerador, Estado estado) throws Exception {
+        List<Producto> lista = productoRepo.listarProductosEstadoModerador(codigoModerador, estado);
+
+        if(lista.isEmpty()) {
+            throw new ListaVaciaException("Usted no tiene productos con estado " + estado);
+        }
+
+        List<ProductoGetDTO> respuesta = new ArrayList<>();
+
+        for(Producto p : lista){
+            respuesta.add( convertir(p) );
+        }
+        return respuesta;
     }
 
     @Override
@@ -142,7 +172,7 @@ public class ProductoServicioImpl implements ProductoServicio {
         List<Producto> lista = productoRepo.listarFavoritos(codigoUsuario);
 
         if(lista.isEmpty()){
-            throw new Exception("El usuario no tiene productos favoritos");
+            throw new ListaVaciaException("El usuario no tiene productos favoritos");
         }
 
         List<ProductoGetDTO> respuesta = new ArrayList<>();
@@ -159,7 +189,7 @@ public class ProductoServicioImpl implements ProductoServicio {
         List<Producto> lista = productoRepo.listarProductosNombre(nombre);
 
         if(lista.isEmpty()){
-            throw new Exception("El producto no esta a la venta");
+            throw new ListaVaciaException("El producto no esta a la venta");
         }
 
         List<ProductoGetDTO> respuesta = new ArrayList<>();
@@ -175,7 +205,7 @@ public class ProductoServicioImpl implements ProductoServicio {
         List<Producto> lista = productoRepo.listarPorPrecio(precioMinimo, precioMaximo);
 
         if(lista.isEmpty()){
-            throw new Exception("No hay productos en ese rango de precios");
+            throw new ListaVaciaException("No hay productos en ese rango de precios");
         }
 
         List<ProductoGetDTO> respuesta = new ArrayList<>();
@@ -203,7 +233,7 @@ public class ProductoServicioImpl implements ProductoServicio {
     private ProductoGetDTO convertir(Producto producto){
         ProductoGetDTO productoGetDTO = new ProductoGetDTO(
                 producto.getCodigo(),
-                producto.isActivo(),//preguntar getActivo no sale
+                producto.getActivo(),
                 producto.getFechaLimite(),
                 producto.getNombre(),
                 producto.getDescripcion(),
@@ -218,7 +248,6 @@ public class ProductoServicioImpl implements ProductoServicio {
 
     private Producto convertirDTO(ProductoDTO productoDTO) throws Exception {
         Producto producto = new Producto();
-            //producto.setActivo(productoDTO.isActivo());
             producto.setNombre(productoDTO.getNombre());
             producto.setDescripcion(productoDTO.getDescripcion());
             producto.setUnidades(productoDTO.getUnidades());
@@ -231,8 +260,8 @@ public class ProductoServicioImpl implements ProductoServicio {
         boolean existe = productoRepo.existsById(codigoProducto);
 
         if( !existe ){
-            throw new Exception("El código "+codigoProducto+" no está asociado a ningún producto");
+            throw new ObjetoNoEncontradoException("El código "+codigoProducto+" no está asociado a ningún producto");
         }
-
     }
+
 }

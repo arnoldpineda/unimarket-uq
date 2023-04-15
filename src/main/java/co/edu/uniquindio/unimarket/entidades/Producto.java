@@ -46,7 +46,8 @@ public class Producto implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private boolean activo;
+    @Enumerated(EnumType.STRING)
+    private Estado activo;
 
     @NotNull
     @Column(nullable = false)

@@ -24,7 +24,7 @@ public class UsuarioDTO {
 
     @NotNull
     @NotBlank
-    @Length(max = 10, message = "La contraseña debe tener máximo 10 caracteres")
+    @Length(max = 100, message = "La contraseña debe tener máximo 10 caracteres")
     private String password;
 
     @NotNull

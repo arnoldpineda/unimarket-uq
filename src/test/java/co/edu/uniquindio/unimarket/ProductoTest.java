@@ -2,8 +2,8 @@ package co.edu.uniquindio.unimarket;
 
 import co.edu.uniquindio.unimarket.dto.ProductoDTO;
 import co.edu.uniquindio.unimarket.dto.ProductoGetDTO;
-import co.edu.uniquindio.unimarket.dto.UsuarioDTO;
 import co.edu.uniquindio.unimarket.entidades.Categoria;
+import co.edu.uniquindio.unimarket.entidades.Estado;
 import co.edu.uniquindio.unimarket.entidades.Producto;
 import co.edu.uniquindio.unimarket.servicios.interfaces.ProductoServicio;
 import co.edu.uniquindio.unimarket.servicios.interfaces.UsuarioServicio;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +82,7 @@ public class ProductoTest {
 
     @Test
     @Sql("classpath:dataset.sql")
-    public void obtener()throws Exception{
+    public void obtenerTest()throws Exception{
 
         Producto producto = (productoServicio.obtener(2));
         //Assertions.assertNotEquals(0, producto.getCodigo());
@@ -95,7 +94,6 @@ public class ProductoTest {
     public void obtenerProductoTest() throws Exception {
         ProductoGetDTO productoGetDTO = productoServicio.obtenerProducto(1);
         Assertions.assertNotNull(productoGetDTO);
-
     }
 
     @Test
@@ -103,8 +101,14 @@ public class ProductoTest {
     public void actualizarUnidadesTest () throws Exception{
 
         int unidades = productoServicio.actualizarUnidades(1, 50);
-
         Assertions.assertEquals(50, unidades);
+    }
+
+    @Test
+    @Sql("classpath:dataset.sql")
+    public void actualizarEstadoTest()throws Exception{
+        int codigoProducto = productoServicio.actualizarEstado(3,Estado.AUTORIZADO);
+        Assertions.assertEquals(Estado.AUTORIZADO, productoServicio.obtenerProducto(3).getActivo());
     }
 
     @Test
@@ -131,6 +135,20 @@ public class ProductoTest {
         //lista.forEach(System.out::println);
 
         Assertions.assertEquals(1,lista.size());
+    }
+
+    @Test
+    @Sql("classpath:dataset.sql")
+    public void listarProductosPorEstadoTest()throws Exception {
+        List<ProductoGetDTO> lista = productoServicio.listarProductosPorEstado(Estado.DENEGADO);
+        Assertions.assertEquals(2,lista.size());
+    }
+
+    @Test
+    @Sql("classpath:dataset.sql")
+    public void listarProductosEstadoModeradorTest()throws Exception {
+        List<ProductoGetDTO> lista = productoServicio.listarProductosEstadoModerador(2, Estado.AUTORIZADO);
+        Assertions.assertEquals(2,lista.size());
     }
 
     @Test

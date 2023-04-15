@@ -28,7 +28,9 @@ public interface ProductoServicio {
 
     List<ProductoGetDTO> listarProductosCategoria(Categoria categoria) throws Exception;
 
-    List<ProductoGetDTO> listarProductosPorEstado(Estado estado);
+    List<ProductoGetDTO> listarProductosPorEstado(Estado estado) throws Exception;
+
+    List<ProductoGetDTO> listarProductosEstadoModerador(int codigoModerador, Estado estado) throws Exception;
 
     List<ProductoGetDTO> listarProductosFavoritos(int codigoUsuario) throws Exception;
 

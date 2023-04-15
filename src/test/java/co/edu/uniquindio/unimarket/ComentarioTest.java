@@ -25,7 +25,7 @@ public class ComentarioTest {
 
         //Se crea el comentario
         ComentarioDTO comentarioDTO = new ComentarioDTO(
-                "Quiero comprar mas unidades de las que estan disponibles",
+                "Prueba Quiero comprar mas unidades de las que estan disponibles",
                 1,
                 4
         );

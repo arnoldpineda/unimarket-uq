@@ -5,6 +5,7 @@ import co.edu.uniquindio.unimarket.dto.QuejaDTO;
 import co.edu.uniquindio.unimarket.dto.QuejaGetDTO;
 import co.edu.uniquindio.unimarket.entidades.Queja;
 import co.edu.uniquindio.unimarket.repositorios.QuejaRepo;
+import co.edu.uniquindio.unimarket.servicios.excepcion.ListaVaciaException;
 import co.edu.uniquindio.unimarket.servicios.interfaces.EmailServicio;
 import co.edu.uniquindio.unimarket.servicios.interfaces.QuejaServicio;
 import co.edu.uniquindio.unimarket.servicios.interfaces.UsuarioServicio;
@@ -47,7 +48,7 @@ public class QuejaServicioImpl implements QuejaServicio {
         List<Queja> lista = quejaRepo.listaQuejasUsuario(codigoUsuario);
 
         if(lista.isEmpty()){
-            throw new Exception("El usuario no tiene quejas radicadas");
+            throw new ListaVaciaException("El usuario no tiene quejas radicadas");
         }
 
         List<QuejaGetDTO> respuesta = new ArrayList<>();

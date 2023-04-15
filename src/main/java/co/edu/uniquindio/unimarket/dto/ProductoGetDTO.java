@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unimarket.dto;
 
 import co.edu.uniquindio.unimarket.entidades.Categoria;
+import co.edu.uniquindio.unimarket.entidades.Estado;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.util.Map;
 @Setter
 public class ProductoGetDTO {
     private int codigo;
-    private boolean activo;
+    private Estado activo;
     private LocalDateTime fechaLimite;
     private String nombre;
     private String descripcion;

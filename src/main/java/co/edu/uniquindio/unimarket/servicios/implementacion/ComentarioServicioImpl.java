@@ -5,6 +5,8 @@ import co.edu.uniquindio.unimarket.dto.ComentarioGetDTO;
 import co.edu.uniquindio.unimarket.dto.EmailDTO;
 import co.edu.uniquindio.unimarket.entidades.Comentario;
 import co.edu.uniquindio.unimarket.repositorios.ComentarioRepo;
+import co.edu.uniquindio.unimarket.entidades.Producto;
+import co.edu.uniquindio.unimarket.servicios.excepcion.ListaVaciaException;
 import co.edu.uniquindio.unimarket.servicios.interfaces.ComentarioServicio;
 import co.edu.uniquindio.unimarket.servicios.interfaces.EmailServicio;
 import co.edu.uniquindio.unimarket.servicios.interfaces.ProductoServicio;
@@ -28,14 +30,17 @@ public class ComentarioServicioImpl implements ComentarioServicio {
 
     @Override
     public int crearComentario(ComentarioDTO comentarioDTO) throws Exception {
+
+        Producto producto = productoServicio.obtener(comentarioDTO.getCodigoProducto()); //se guarda el producto
+
         Comentario comentario = new Comentario();
         comentario.setMensaje(comentarioDTO.getMensaje());
         comentario.setFechaCreacion(LocalDateTime.now());
-        comentario.setProducto(productoServicio.obtener(comentarioDTO.getCodigoProducto()));
+        comentario.setProducto(producto); //se asigna el producto guardado
         comentario.setUsuario(usuarioServicio.obtener(comentarioDTO.getCodigoUsuario()));
 
         //se debe enviar un email (al usuario que publicó el producto) con lo que escribió la persona.
-        String emailVendedor = productoServicio.obtener(comentarioDTO.getCodigoProducto()).getVendedor().getEmail();
+        String emailVendedor = producto.getVendedor().getEmail();
         emailServicio.enviarEmail(new EmailDTO(
                 "Nuevo comentario",
                 comentarioDTO.getMensaje(),
@@ -49,7 +54,7 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         List<Comentario> lista = comentarioRepo.listaComentarios(codigoProducto);
 
         if(lista.isEmpty()){
-            throw new Exception("Producto sin comentarios");
+            throw new ListaVaciaException("Producto sin comentarios");
         }
 
         List<ComentarioGetDTO> respuesta = new ArrayList<>();
