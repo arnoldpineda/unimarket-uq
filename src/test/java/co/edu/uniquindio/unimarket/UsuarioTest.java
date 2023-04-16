@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Optional;
-
 @SpringBootTest
 @Transactional
 public class UsuarioTest {
@@ -26,6 +24,7 @@ public class UsuarioTest {
     private EmailServicio emailServicio;
 
     @Test
+    @Sql("classpath:dataset.sql")
     public void crearUsuarioTest() throws Exception{
 
         //Se crea el usuario con el servicio de crearUsuario
@@ -38,6 +37,7 @@ public class UsuarioTest {
 
         int codigo = usuarioServicio.crearUsuario(usuarioDTO);
 
+        System.out.print(usuarioServicio.obtener(codigo).getPassword());
         //Se espera que si se registra correctamente entonces el servicio no debe retornar 0
         Assertions.assertNotEquals(0, codigo);
 
@@ -51,7 +51,7 @@ public class UsuarioTest {
         //System.out.print(usuarioGetDTO.getNombre());
 
         //El servicio de actualizar nos retorna el usuario
-        UsuarioGetDTO usuarioActualizado = usuarioServicio.actualizarUsuario(1, new UsuarioDTO("Juan Perez", "pepe1@email.com", "1234", "Calle 123", "1111"));
+        UsuarioGetDTO usuarioActualizado = usuarioServicio.actualizarUsuario(1, new UsuarioDTO("Juan Perez", "pepitoperez@email.com", "1234", "Calle 123", "1111"));
 
         //Se comprueba que ahora el teléfono del usuario no es el que se usó cuando se creó inicialmente
         Assertions.assertNotEquals("2782", usuarioActualizado.getTelefono());
@@ -104,5 +104,6 @@ public class UsuarioTest {
     @Sql("classpath:dataset.sql")
     public void enviarEmailTest() throws Exception{
         emailServicio.enviarEmail(new EmailDTO("Prueba", "Esta es una prueba", "jmllantenm@uqvirtual.edu.co"));
+        //Se verifica en el correo, asunto y mensaje ok
     }
 }

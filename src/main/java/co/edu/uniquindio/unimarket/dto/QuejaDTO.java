@@ -2,6 +2,7 @@ package co.edu.uniquindio.unimarket.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +16,7 @@ public class QuejaDTO {
     @NotBlank
     private String Descripcion;
 
-    @NotNull
-    @NotBlank
+    @Positive
     private int codigoUsuario;
 }
 

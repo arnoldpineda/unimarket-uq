@@ -36,7 +36,7 @@ public class ProductoDTO {
     @Positive
     private int codigoVendedor;
 
-    private boolean activo;
+    //private boolean activo;
 
     private Map<String, String> imagenes;//cambiar por mapa
 

@@ -5,8 +5,11 @@ import co.edu.uniquindio.unimarket.dto.UsuarioGetDTO;
 import co.edu.uniquindio.unimarket.entidades.Usuario;
 import co.edu.uniquindio.unimarket.repositorios.UsuarioRepo;
 import co.edu.uniquindio.unimarket.servicios.excepcion.AttributeException;
+import co.edu.uniquindio.unimarket.servicios.excepcion.ObjetoNoEncontradoException;
 import co.edu.uniquindio.unimarket.servicios.interfaces.UsuarioServicio;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,23 +20,29 @@ public class UsuarioServicioImpl implements UsuarioServicio {
 
     private final UsuarioRepo usuarioRepo;
 
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public int crearUsuario(UsuarioDTO usuarioDTO) throws Exception {
 
-        Usuario buscado = usuarioRepo.buscarUsuario(usuarioDTO.getEmail());
-
-        if(buscado!=null){
-            throw new AttributeException("El correo "+ usuarioDTO.getEmail() +" ya esta en uso" );
-        }
+        validarCorreoExiste(usuarioDTO.getEmail()); //valida si el correo ya esta en uso
         Usuario usuario = convertirDTO(usuarioDTO);
+
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        
         return usuarioRepo.save(usuario).getCodigo() ;
     }
-
 
     @Override
     public UsuarioGetDTO actualizarUsuario(int codigoUsuario, UsuarioDTO usuarioDTO) throws Exception {
 
         validarExiste(codigoUsuario); //Valida que el codigo exista
+
+        //Se valida si el correo ya esta en uso por otro usuario si es diferente al correo actual
+        if(!obtener(codigoUsuario).getEmail().equals(usuarioDTO.getEmail())){
+            validarCorreoExiste(usuarioDTO.getEmail());
+        }
 
         Usuario usuario = convertirDTO(usuarioDTO);
         usuario.setCodigo(codigoUsuario);
@@ -58,7 +67,7 @@ public class UsuarioServicioImpl implements UsuarioServicio {
         Optional<Usuario> usuario = usuarioRepo.findById(codigoUsuario);
 
         if(usuario.isEmpty() ){
-            throw new Exception("El código "+codigoUsuario+" no está asociado a ningún usuario");
+            throw new ObjetoNoEncontradoException("El código "+codigoUsuario+" no está asociado a ningún usuario");
         }
 
         return usuario.get();
@@ -68,7 +77,15 @@ public class UsuarioServicioImpl implements UsuarioServicio {
         boolean existe = usuarioRepo.existsById(codigoUsuario);
 
         if( !existe ){
-            throw new Exception("El código "+codigoUsuario+" no está asociado a ningún usuario");
+            throw new ObjetoNoEncontradoException("El código "+codigoUsuario+" no está asociado a ningún usuario");
+        }
+    }
+
+    private void validarCorreoExiste(String email) throws Exception{
+        Usuario buscado = usuarioRepo.buscarUsuario(email);
+
+        if(buscado!=null){
+            throw new AttributeException("El correo "+ email +" ya esta en uso" );
         }
     }
 

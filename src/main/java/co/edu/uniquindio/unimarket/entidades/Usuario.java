@@ -42,6 +42,7 @@ public class Usuario extends Persona implements Serializable{
 
     //Lista favorito
     @ManyToMany
+    @ToString.Exclude
     @JoinTable (name = "favoritos")
     private List<Producto> favoritos;
 
