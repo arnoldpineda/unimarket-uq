@@ -1,5 +1,6 @@
 package co.edu.uniquindio.unimarket;
 
+import co.edu.uniquindio.unimarket.dto.ImagenDTO;
 import co.edu.uniquindio.unimarket.dto.ProductoDTO;
 import co.edu.uniquindio.unimarket.dto.ProductoGetDTO;
 import co.edu.uniquindio.unimarket.entidades.Categoria;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +48,11 @@ public class ProductoTest {
         int codigoVendedor = 1;
 
         //Se crea el mapa de imágenes para el producto.
-        Map<String, String> imagenes = new HashMap<>();
-        imagenes.put("http://www.google.com/images/imagenasus.png","1");
+        //Map<String, String> imagenes = new HashMap<>();
+        //imagenes.put("http://www.google.com/images/imagenasus.png","1");
+        ImagenDTO imagenDTO = new ImagenDTO("http://www.google.com/images/imagenasus.png","1");
+        List<ImagenDTO> imagenes = new ArrayList<>();
+        imagenes.add(imagenDTO);
 
         //Se crea el producto y se asigna el codigo vendedor registrado en la BD
         ProductoDTO productoDTO = new ProductoDTO(
@@ -69,10 +74,13 @@ public class ProductoTest {
 
     @Test
     @Sql("classpath:dataset.sql")
-    public void actualizarServicioTest () throws Exception{
+    public void actualizarProductoTest () throws Exception{
 
-        Map<String, String> imagenes = new HashMap<>();
-        imagenes.put("http://www.google.com/images/imagenasus.png","1");
+        //Map<String, String> imagenes = new HashMap<>();
+        //imagenes.put("http://www.google.com/images/imagenasus.png","1");
+        ImagenDTO imagenDTO = new ImagenDTO("http://www.google.com/images/imagenasus.png","1");
+        List<ImagenDTO> imagenes = new ArrayList<>();
+        imagenes.add(imagenDTO);
 
         ProductoGetDTO productoActualizado = productoServicio.actualizarProducto(1, new ProductoDTO("camisa", "camisa de hombre", 13,25000, 1, imagenes, List.of(Categoria.MODA))) ;
 
@@ -175,19 +183,7 @@ public class ProductoTest {
         Assertions.assertEquals(1,lista.size());
     }
 
-    @Test
-    @Sql("classpath:dataset.sql")
-    public void crearFavoritoTest() throws Exception{
-        int codigoUsuario = 1 ;
-        int codigoProducto = 1 ;
 
-        productoServicio.crearFavorito(codigoUsuario, codigoProducto);
-
-        List<ProductoGetDTO> lista = productoServicio.listarProductosFavoritos(1);
-
-        //En la base de datos el usuario 1 tiene 2 favoritos, con el que se acaba de agregar quedan 3
-        Assertions.assertEquals(3,lista.size());
-    }
 
     @Test
     @Sql("classpath:dataset.sql")

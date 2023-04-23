@@ -17,4 +17,6 @@ public interface CompraServicio {
     List<CompraGetDTO> listarCompras(int codigoUsuario) throws Exception;
 
     Compra obtenerCompra(int codigoCompra) throws Exception;
+
+    CompraGetDTO obtenerDTO(int codigoCompra) throws Exception;
 }

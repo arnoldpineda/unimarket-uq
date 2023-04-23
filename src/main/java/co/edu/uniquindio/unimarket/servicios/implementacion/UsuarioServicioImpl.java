@@ -1,8 +1,11 @@
 package co.edu.uniquindio.unimarket.servicios.implementacion;
 
+import co.edu.uniquindio.unimarket.dto.FavoritoDTO;
 import co.edu.uniquindio.unimarket.dto.UsuarioDTO;
 import co.edu.uniquindio.unimarket.dto.UsuarioGetDTO;
+import co.edu.uniquindio.unimarket.entidades.Producto;
 import co.edu.uniquindio.unimarket.entidades.Usuario;
+import co.edu.uniquindio.unimarket.repositorios.ProductoRepo;
 import co.edu.uniquindio.unimarket.repositorios.UsuarioRepo;
 import co.edu.uniquindio.unimarket.servicios.excepcion.AttributeException;
 import co.edu.uniquindio.unimarket.servicios.excepcion.ObjetoNoEncontradoException;
@@ -12,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,12 +28,16 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
+    private final ProductoRepo productoRepo;
+
+
     @Override
     public int crearUsuario(UsuarioDTO usuarioDTO) throws Exception {
 
         validarCorreoExiste(usuarioDTO.getEmail()); //valida si el correo ya esta en uso
         Usuario usuario = convertirDTO(usuarioDTO);
-
+        List<Producto> favoritos = new ArrayList<Producto>();
+        usuario.setFavoritos(favoritos);
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         
         return usuarioRepo.save(usuario).getCodigo() ;
@@ -46,6 +55,7 @@ public class UsuarioServicioImpl implements UsuarioServicio {
 
         Usuario usuario = convertirDTO(usuarioDTO);
         usuario.setCodigo(codigoUsuario);
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return convertir(usuarioRepo.save(usuario));
     }
 
@@ -107,4 +117,22 @@ public class UsuarioServicioImpl implements UsuarioServicio {
         return usuario;
     }
 
+    @Override
+    public void agregarFavorito(FavoritoDTO favoritoDTO) throws Exception {
+
+        usuarioRepo.agregarFavorito(favoritoDTO.getUsuariosCodigo(), favoritoDTO.getFavoritosCodigo());
+    }
+
+    //usando Query del repositorio
+    @Override
+    public void eliminarFavorito(FavoritoDTO favoritoDTO) throws Exception {
+
+        usuarioRepo.eliminar(favoritoDTO.getUsuariosCodigo(), favoritoDTO.getFavoritosCodigo());
+
+    }
+
+
+
 }
+
+

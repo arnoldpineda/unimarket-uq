@@ -50,7 +50,13 @@ public class WebSecurityConfig {
         http.authenticationManager(authenticationManager);
         http.csrf().disable();
         http.cors();
-        http.authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll().anyRequest().authenticated();
+        http.authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll();
+        http.authorizeHttpRequests().requestMatchers("/api/moderador/**").hasAuthority("MODERADOR");
+        http.authorizeHttpRequests().requestMatchers("/api/usuario/**", "/api/comentario/**", "/api/queja/**", "/api/compra/**", "/api/imagenes/**").hasAuthority("CLIENTE");
+        http.authorizeHttpRequests().requestMatchers("/api/producto/crear_producto/**", "/api/producto/actualizar_producto/**", "/api/producto/eliminar_producto/**").hasAuthority("CLIENTE");
+        http.authorizeHttpRequests().requestMatchers("/api/producto/listar_propios/**").hasAuthority("CLIENTE");
+        http.authorizeHttpRequests().requestMatchers("/api/cambiarpassword/**").permitAll();
+        http.authorizeHttpRequests().requestMatchers("/api/producto/listar_disponibles/**", "/api/producto/obtener/**", "/api/producto/listar_categoria/**", "/api/producto/listar_nombre/**", "/api/producto/listar_precio/**").permitAll().anyRequest().authenticated();
         http.exceptionHandling().authenticationEntryPoint(jwtAuthenticationFilter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

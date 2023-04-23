@@ -1,10 +1,9 @@
 package co.edu.uniquindio.unimarket;
 
-import co.edu.uniquindio.unimarket.dto.EmailDTO;
-import co.edu.uniquindio.unimarket.dto.UsuarioDTO;
-import co.edu.uniquindio.unimarket.dto.UsuarioGetDTO;
+import co.edu.uniquindio.unimarket.dto.*;
 import co.edu.uniquindio.unimarket.entidades.Usuario;
 import co.edu.uniquindio.unimarket.servicios.interfaces.EmailServicio;
+import co.edu.uniquindio.unimarket.servicios.interfaces.ProductoServicio;
 import co.edu.uniquindio.unimarket.servicios.interfaces.UsuarioServicio;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+
+import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -22,6 +23,9 @@ public class UsuarioTest {
 
     @Autowired
     private EmailServicio emailServicio;
+
+    @Autowired
+    private ProductoServicio productoServicio;
 
     @Test
     @Sql("classpath:dataset.sql")
@@ -106,4 +110,19 @@ public class UsuarioTest {
         emailServicio.enviarEmail(new EmailDTO("Prueba", "Esta es una prueba", "jmllantenm@uqvirtual.edu.co"));
         //Se verifica en el correo, asunto y mensaje ok
     }
+
+    @Test
+    @Sql("classpath:dataset.sql")
+    public void crearFavoritoTest() throws Exception{
+
+        FavoritoDTO favoritoDTO = new FavoritoDTO(1,1);
+
+        usuarioServicio.agregarFavorito(favoritoDTO);
+
+        List<ProductoGetDTO> lista = productoServicio.listarProductosFavoritos(1);
+
+        //En la base de datos el usuario 1 tiene 2 favoritos, con el que se acaba de agregar quedan 3
+        Assertions.assertEquals(3,lista.size());
+    }
+
 }

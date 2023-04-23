@@ -2,6 +2,8 @@ package co.edu.uniquindio.unimarket.controladores.excepciones;
 
 import co.edu.uniquindio.unimarket.dto.MensajeDTO;
 import co.edu.uniquindio.unimarket.servicios.excepcion.AttributeException;
+import co.edu.uniquindio.unimarket.servicios.excepcion.ListaVaciaException;
+import co.edu.uniquindio.unimarket.servicios.excepcion.ObjetoNoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -19,8 +21,8 @@ public class GlobalExceptions {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<MensajeDTO> badCredentialsException(BadCredentialsException e){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new
-                MensajeDTO(HttpStatus.BAD_REQUEST, true, "Datos de autenticación incorrectos") );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body( new
+                MensajeDTO(HttpStatus.FORBIDDEN, true, "Datos de autenticación incorrectos") );
     }
 
     @ExceptionHandler(Exception.class)
@@ -31,14 +33,12 @@ public class GlobalExceptions {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<MensajeDTO> accessDeniedException(AccessDeniedException accessDeniedException) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new
-                MensajeDTO(HttpStatus.FORBIDDEN, true, "No se puede acceder a este recurso"));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MensajeDTO(HttpStatus.FORBIDDEN, true, "No se puede acceder a este recurso"));
     }
 
     @ExceptionHandler(AttributeException.class)
     public ResponseEntity<MensajeDTO> throwAttributeException(AttributeException e) {
-        return ResponseEntity.badRequest().body(new MensajeDTO(HttpStatus.BAD_REQUEST, true,
-                e.getMessage()));
+        return ResponseEntity.badRequest().body(new MensajeDTO(HttpStatus.BAD_REQUEST, true, e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -48,7 +48,17 @@ public class GlobalExceptions {
         for (FieldError e: results.getFieldErrors()) {
             messages.add(e.getField()+": "+e.getDefaultMessage());
         }
-        return ResponseEntity.badRequest().body(new MensajeDTO(HttpStatus.BAD_REQUEST, true,
-                messages.toString()));
+        return ResponseEntity.badRequest().body(new MensajeDTO(HttpStatus.BAD_REQUEST, true, messages.toString()));
     }
+
+    @ExceptionHandler(ListaVaciaException.class)
+    public ResponseEntity<MensajeDTO> listaVaciaExcepcion(ListaVaciaException e) {
+        return ResponseEntity.badRequest().body(new MensajeDTO(HttpStatus.NO_CONTENT, true, e.getMessage()));
+    }
+
+    @ExceptionHandler(ObjetoNoEncontradoException.class)
+    public ResponseEntity<MensajeDTO> objetoNoEncontradoException(ObjetoNoEncontradoException e) {
+        return ResponseEntity.badRequest().body(new MensajeDTO(HttpStatus.NOT_FOUND, true, e.getMessage()));
+    }
+
 }

@@ -8,4 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/cambiarpassword")
 @AllArgsConstructor
 public class CambiarPasswordControlador {
+
+    //public void recuperarPassword(String email) throws Exception
+
+
+    //public void cambiarPassword(){}
+
+
 }

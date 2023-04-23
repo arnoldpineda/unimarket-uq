@@ -38,7 +38,7 @@ public class ProductoDTO {
 
     //private boolean activo;
 
-    private Map<String, String> imagenes;//cambiar por mapa
+    private List<ImagenDTO> imagenes;//se recibe lista y se cambia a mapa en la funcion crear
 
     private List<Categoria> categorias;
 }
