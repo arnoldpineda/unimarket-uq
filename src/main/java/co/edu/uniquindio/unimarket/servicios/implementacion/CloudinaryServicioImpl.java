@@ -19,18 +19,16 @@ public class CloudinaryServicioImpl implements CloudinaryServicio {
     private Map<String, String> config;
 
     public CloudinaryServicioImpl(){
-    //public CloudinaryServicio(){ //Esta genera error
         config = new HashMap<>();
-        config.put("cloud_name", "SU_CLOUD_NAME");
-        config.put("api_key", "SU_API_KEY");
-        config.put("api_secret", "SU_API_SECRET");
+        config.put("cloud_name", "dsr8wu5yn");
+        config.put("api_key", "115673969154647");
+        config.put("api_secret", "xq5GjIsdpxCn8yWehNlGXje_-LU");
         cloudinary = new Cloudinary(config);
     }
 
     @Override
     public Map subirImagen(File file, String carpeta) throws Exception{
-        return cloudinary.uploader().upload(file, ObjectUtils.asMap("folder",
-                String.format("co/edu/uniquindio/unimarket/%s", carpeta)));
+        return cloudinary.uploader().upload(file, ObjectUtils.asMap("folder", String.format("co/edu/uniquindio/unimarket/%s", carpeta)));
     }
 
     @Override

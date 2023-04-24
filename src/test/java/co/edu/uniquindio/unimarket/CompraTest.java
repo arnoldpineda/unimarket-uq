@@ -49,6 +49,7 @@ public class CompraTest {
 
         //Se llama el servicio para crear la compra
         int codigoCompra = compraServicio.crearCompra(compraDTO);
+        //System.out.print("can actualizada de unidades: " + productoServicio.obtenerProducto(1).getUnidades());
         Assertions.assertNotEquals(0,codigoCompra);
     }
 
@@ -69,6 +70,15 @@ public class CompraTest {
         //System.out.print(compra);
         Assertions.assertNotNull(compra);
     }
+
+
+    @Test
+    @Sql("classpath:dataset.sql")
+    public void obtenerDtoTest()throws Exception{
+        CompraGetDTO compraGetDTO =compraServicio.obtenerDTO(1);
+        Assertions.assertNotNull(compraGetDTO);
+    }
+
 
 }
 

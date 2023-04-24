@@ -18,7 +18,7 @@ public class ProductoModeradorDTO {
 
     @NotNull
     @NotBlank
-    @Length(max = 50, message = "La contraseña debe tener máximo 50 caracteres")
+    @Length(max = 50, message = "El motivo debe tener máximo 50 caracteres")
     private String motivo;
 
     @Positive

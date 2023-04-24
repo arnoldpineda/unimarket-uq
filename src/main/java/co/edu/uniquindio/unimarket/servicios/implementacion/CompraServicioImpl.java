@@ -42,11 +42,18 @@ public class CompraServicioImpl implements CompraServicio {
         float total = 0;
         ArrayList<DetalleCompra> detalleCompras = new ArrayList<>(); //Se crea una lista detalle compra
 
+
         for( DetalleCompraDTO detalle: compraDTO.getDetalleCompraDTO() ){
-            validarUniDisponibles(detalle.getUnidades(), detalle.getCodigoProducto());
+            int unidadesCompradas = detalle.getUnidades();
+            int codProducto = detalle.getCodigoProducto();
+            int uniDisponibles = productoServicio.obtener(codProducto).getUnidades();
+
+            validarUniDisponibles(unidadesCompradas, codProducto); //Valida las unidades dispobles
+
             DetalleCompra dt = crearDetalleCompra(detalle);  // Se crea el detalle
             detalleCompras.add(dt);  //Se guarda el detalle en la lista de detalleCompra
-            total += detalle.getUnidades()*detalle.getPrecio();  // Se multiplica el valor por las unidades de cada detalle y se van sumando para sacar el total
+            total += unidadesCompradas * detalle.getPrecio();  // Se multiplica el valor por las unidades de cada detalle y se van sumando para sacar el total
+            productoServicio.actualizarUnidades(codProducto, uniDisponibles-unidadesCompradas);
         }
 
         Compra compra = new Compra ();
@@ -113,6 +120,10 @@ public class CompraServicioImpl implements CompraServicio {
         return compra.get();
     }
 
+    @Override
+    public CompraGetDTO obtenerDTO(int codigoCompra) throws Exception{
+        return convertir(obtenerCompra(codigoCompra));
+    }
 
     private void validarUniDisponibles (int canSeleccionada, int codigoProducto) throws Exception {
 

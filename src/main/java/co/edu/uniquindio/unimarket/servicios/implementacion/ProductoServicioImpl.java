@@ -1,5 +1,6 @@
 package co.edu.uniquindio.unimarket.servicios.implementacion;
 
+import co.edu.uniquindio.unimarket.dto.FavoritoDTO;
 import co.edu.uniquindio.unimarket.dto.ProductoDTO;
 import co.edu.uniquindio.unimarket.dto.ProductoGetDTO;
 import co.edu.uniquindio.unimarket.entidades.Categoria;
@@ -7,6 +8,7 @@ import co.edu.uniquindio.unimarket.entidades.Estado;
 import co.edu.uniquindio.unimarket.entidades.Producto;
 import co.edu.uniquindio.unimarket.entidades.Usuario;
 import co.edu.uniquindio.unimarket.repositorios.ProductoRepo;
+import co.edu.uniquindio.unimarket.repositorios.UsuarioRepo;
 import co.edu.uniquindio.unimarket.servicios.excepcion.ListaVaciaException;
 import co.edu.uniquindio.unimarket.servicios.excepcion.ObjetoNoEncontradoException;
 import co.edu.uniquindio.unimarket.servicios.interfaces.ProductoServicio;
@@ -15,9 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -30,18 +30,8 @@ public class ProductoServicioImpl implements ProductoServicio {
 
     @Override
     public int crearProducto(ProductoDTO productoDTO) throws Exception {
-        Producto producto = new Producto();
-        producto.setNombre( productoDTO.getNombre() );
-        producto.setDescripcion( productoDTO.getDescripcion() );
-        producto.setUnidades( productoDTO.getUnidades() );
-        producto.setPrecio( productoDTO.getPrecio() );
-        producto.setVendedor( usuarioServicio.obtener( productoDTO.getCodigoVendedor() ) );
-        producto.setImagen( productoDTO.getImagenes() );
-        producto.setCategoria( productoDTO.getCategorias() );
-        producto.setActivo(Estado.SIN_REVISAR); // Se crea como SIN_REVISAR es decir inactivo
-        producto.setFechaCreado( LocalDateTime.now() );
-        producto.setFechaLimite( LocalDateTime.now().plusDays(60) ); //Fecha limite es 3 meses despues de crearce
 
+        Producto producto = convertirDTO(productoDTO);
         return productoRepo.save( producto ).getCodigo();
     }
 
@@ -54,7 +44,7 @@ public class ProductoServicioImpl implements ProductoServicio {
         return convertir(productoRepo.save(producto));
     }
 
-
+    //Actualiza las unidades al realizar una compra
     @Override
     public int actualizarUnidades(int codigoProducto, int unidades) throws Exception {
         validarProductoExiste(codigoProducto); //validar que el codigo del producto exista
@@ -185,6 +175,23 @@ public class ProductoServicioImpl implements ProductoServicio {
     }
 
     @Override
+    public List<ProductoGetDTO> listarProductosDisponibles() throws Exception{
+        List<Producto> lista = productoRepo.listarProductosDisponibles();
+
+        if(lista.isEmpty()){
+            throw new ListaVaciaException("No hay productos disponibles para la venta");
+        }
+
+        List<ProductoGetDTO> respuesta = new ArrayList<>();
+
+        for(Producto p : lista){
+            respuesta.add( convertir(p) );
+        }
+
+        return respuesta;
+    }
+
+    @Override
     public List<ProductoGetDTO> listarProductosNombre(String nombre) throws Exception {
         List<Producto> lista = productoRepo.listarProductosNombre(nombre);
 
@@ -216,18 +223,18 @@ public class ProductoServicioImpl implements ProductoServicio {
         return respuesta;
     }
 
-    @Override
-    public void crearFavorito(int codigoUsuario, int codigoProducto) throws Exception{
-        Usuario usuario = usuarioServicio.obtener(codigoUsuario);
-        Producto producto = obtener(codigoProducto);
-        usuario.getFavoritos().add(producto);
-    }
 
     @Override
     public void eliminarFavorito(int codigoUsuario, int codigoProducto) throws Exception{
-        Usuario usuario = usuarioServicio.obtener(codigoUsuario);
+
         Producto producto = obtener(codigoProducto);
-        usuario.getFavoritos().remove(producto);
+        Usuario usuario = usuarioServicio.obtener(codigoUsuario);
+
+        List<Producto> lista = productoRepo.listarFavoritos(codigoUsuario);
+        lista.remove(producto);
+        usuario.setFavoritos(lista);
+
+        //usuario.getFavoritos().remove(producto);
     }
 
     private ProductoGetDTO convertir(Producto producto){
@@ -247,12 +254,24 @@ public class ProductoServicioImpl implements ProductoServicio {
     }
 
     private Producto convertirDTO(ProductoDTO productoDTO) throws Exception {
+
+        Map<String, String> mapa = new HashMap<>();
+        productoDTO.getImagenes().forEach( i ->
+                mapa.put(i.getKey(), i.getValue()))
+        ;
+
         Producto producto = new Producto();
             producto.setNombre(productoDTO.getNombre());
             producto.setDescripcion(productoDTO.getDescripcion());
             producto.setUnidades(productoDTO.getUnidades());
             producto.setPrecio(productoDTO.getPrecio());
             producto.setVendedor(usuarioServicio.obtener(productoDTO.getCodigoVendedor()));
+            producto.setImagen(mapa);
+            producto.setCategoria(productoDTO.getCategorias());
+            producto.setActivo(Estado.SIN_REVISAR); // Se crea como SIN_REVISAR es decir inactivo
+            producto.setFechaCreado( LocalDateTime.now() );
+            producto.setFechaLimite( LocalDateTime.now().plusDays(60) ); //Fecha limite es 3 meses
+
         return producto;
     }
 

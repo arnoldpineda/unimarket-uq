@@ -6,6 +6,7 @@ import co.edu.uniquindio.unimarket.dto.QuejaGetDTO;
 import co.edu.uniquindio.unimarket.entidades.Queja;
 import co.edu.uniquindio.unimarket.repositorios.QuejaRepo;
 import co.edu.uniquindio.unimarket.servicios.excepcion.ListaVaciaException;
+import co.edu.uniquindio.unimarket.servicios.excepcion.ObjetoNoEncontradoException;
 import co.edu.uniquindio.unimarket.servicios.interfaces.EmailServicio;
 import co.edu.uniquindio.unimarket.servicios.interfaces.QuejaServicio;
 import co.edu.uniquindio.unimarket.servicios.interfaces.UsuarioServicio;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -67,6 +69,24 @@ public class QuejaServicioImpl implements QuejaServicio {
                 queja.getFechaPublicacion()
         );
     return quejaGetDTO;
+    }
+
+    @Override
+    public QuejaGetDTO buscarRadicado(int radicado) throws Exception {
+        //QuejaGetDTO queja = quejaRepo.buscarradicado(radicado);
+        //return queja;
+        return convertir(obtener(radicado));
+    }
+
+    @Override
+    public Queja obtener(int codigoQueja) throws Exception {
+        //Devuelve una queja dado su codigo
+        Optional<Queja> queja = quejaRepo.findById(codigoQueja);
+
+        if(queja.isEmpty()){
+            throw new ObjetoNoEncontradoException("El radicado "+codigoQueja+" no existe");
+        }
+        return queja.get();
     }
 }
 

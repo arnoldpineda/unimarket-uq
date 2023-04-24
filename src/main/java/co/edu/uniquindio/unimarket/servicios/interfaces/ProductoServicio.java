@@ -34,11 +34,12 @@ public interface ProductoServicio {
 
     List<ProductoGetDTO> listarProductosFavoritos(int codigoUsuario) throws Exception;
 
+    List<ProductoGetDTO> listarProductosDisponibles() throws Exception;
+
     List<ProductoGetDTO> listarProductosNombre(String nombre) throws Exception;
 
     List<ProductoGetDTO> listarProductosPrecio(float precioMinimo, float precioMaximo) throws Exception;
 
-    void crearFavorito(int codigoUsuario, int codigoProducto) throws Exception;
 
     void eliminarFavorito(int codigoUsuario, int codigoProducto) throws Exception;
 }

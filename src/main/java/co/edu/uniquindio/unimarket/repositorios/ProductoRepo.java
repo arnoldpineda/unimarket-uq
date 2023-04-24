@@ -43,5 +43,8 @@ public interface ProductoRepo extends JpaRepository<Producto, Integer> {
     @Query("select p.producto from ProductoModerador p where p.moderador.codigo = :codigoModerador and p.estado = :estado and current_date <= p.producto.fechaLimite")
     List<Producto> listarProductosEstadoModerador(int codigoModerador, Estado estado);
 
+    @Query ("select p from Producto p where p.activo = co.edu.uniquindio.unimarket.entidades.Estado.AUTORIZADO and current_date <= p.fechaLimite")
+    List<Producto> listarProductosDisponibles();
+
 
 }

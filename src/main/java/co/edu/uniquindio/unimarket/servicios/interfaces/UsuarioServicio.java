@@ -1,5 +1,6 @@
 package co.edu.uniquindio.unimarket.servicios.interfaces;
 
+import co.edu.uniquindio.unimarket.dto.FavoritoDTO;
 import co.edu.uniquindio.unimarket.dto.UsuarioDTO;
 import co.edu.uniquindio.unimarket.dto.UsuarioGetDTO;
 import co.edu.uniquindio.unimarket.entidades.Usuario;
@@ -14,4 +15,8 @@ public interface UsuarioServicio {
     UsuarioGetDTO obtenerUsuario(int codigoUsuario) throws Exception;
 
     Usuario obtener(int codigoUsuario) throws Exception;
+
+    void agregarFavorito(FavoritoDTO favoritoDTO) throws Exception;
+
+    void eliminarFavorito(FavoritoDTO favoritoDTO) throws Exception;
 }

@@ -14,7 +14,7 @@ public class QuejaDTO {
 
     @NotNull
     @NotBlank
-    private String Descripcion;
+    private String descripcion;
 
     @Positive
     private int codigoUsuario;
