@@ -111,21 +111,5 @@ public class UsuarioTest {
         //Se verifica en el correo, asunto y mensaje ok
     }
 
-    /* Eliminar
-    @Test
-    @Sql("classpath:dataset.sql")
-    public void crearFavoritoTest() throws Exception{
-
-        FavoritoDTO favoritoDTO = new FavoritoDTO(1,1);
-
-        usuarioServicio.agregarFavorito(favoritoDTO);
-
-        List<ProductoGetDTO> lista = productoServicio.listarProductosFavoritos(1);
-
-        //En la base de datos el usuario 1 tiene 2 favoritos, con el que se acaba de agregar quedan 3
-        Assertions.assertEquals(3,lista.size());
-    }
-
-     */
 
 }
