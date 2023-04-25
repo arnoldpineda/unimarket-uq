@@ -117,19 +117,14 @@ public class UsuarioServicioImpl implements UsuarioServicio {
         return usuario;
     }
 
+    /* Eliminar
     @Override
     public void agregarFavorito(FavoritoDTO favoritoDTO) throws Exception {
 
         usuarioRepo.agregarFavorito(favoritoDTO.getUsuariosCodigo(), favoritoDTO.getFavoritosCodigo());
     }
 
-    //usando Query del repositorio
-    @Override
-    public void eliminarFavorito(FavoritoDTO favoritoDTO) throws Exception {
-
-        usuarioRepo.eliminar(favoritoDTO.getUsuariosCodigo(), favoritoDTO.getFavoritosCodigo());
-
-    }
+     */
 
 
 

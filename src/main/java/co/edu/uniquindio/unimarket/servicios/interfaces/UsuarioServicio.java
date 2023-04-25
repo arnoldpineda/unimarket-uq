@@ -16,7 +16,6 @@ public interface UsuarioServicio {
 
     Usuario obtener(int codigoUsuario) throws Exception;
 
-    void agregarFavorito(FavoritoDTO favoritoDTO) throws Exception;
+    //void agregarFavorito(FavoritoDTO favoritoDTO) throws Exception;
 
-    void eliminarFavorito(FavoritoDTO favoritoDTO) throws Exception;
 }

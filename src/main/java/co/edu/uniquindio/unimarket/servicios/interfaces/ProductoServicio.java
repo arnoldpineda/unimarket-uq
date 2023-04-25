@@ -5,6 +5,7 @@ import co.edu.uniquindio.unimarket.dto.ProductoGetDTO;
 import co.edu.uniquindio.unimarket.entidades.Categoria;
 import co.edu.uniquindio.unimarket.entidades.Estado;
 import co.edu.uniquindio.unimarket.entidades.Producto;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,6 +41,9 @@ public interface ProductoServicio {
 
     List<ProductoGetDTO> listarProductosPrecio(float precioMinimo, float precioMaximo) throws Exception;
 
+
+    @Transactional
+    void agregarFavorito(int codigoUsuario, int codigoProducto) throws Exception;
 
     void eliminarFavorito(int codigoUsuario, int codigoProducto) throws Exception;
 }

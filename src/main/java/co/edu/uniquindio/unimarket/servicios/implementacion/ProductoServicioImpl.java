@@ -1,6 +1,5 @@
 package co.edu.uniquindio.unimarket.servicios.implementacion;
 
-import co.edu.uniquindio.unimarket.dto.FavoritoDTO;
 import co.edu.uniquindio.unimarket.dto.ProductoDTO;
 import co.edu.uniquindio.unimarket.dto.ProductoGetDTO;
 import co.edu.uniquindio.unimarket.entidades.Categoria;
@@ -8,7 +7,7 @@ import co.edu.uniquindio.unimarket.entidades.Estado;
 import co.edu.uniquindio.unimarket.entidades.Producto;
 import co.edu.uniquindio.unimarket.entidades.Usuario;
 import co.edu.uniquindio.unimarket.repositorios.ProductoRepo;
-import co.edu.uniquindio.unimarket.repositorios.UsuarioRepo;
+import org.springframework.transaction.annotation.Transactional;
 import co.edu.uniquindio.unimarket.servicios.excepcion.ListaVaciaException;
 import co.edu.uniquindio.unimarket.servicios.excepcion.ObjetoNoEncontradoException;
 import co.edu.uniquindio.unimarket.servicios.interfaces.ProductoServicio;
@@ -224,17 +223,22 @@ public class ProductoServicioImpl implements ProductoServicio {
     }
 
 
+    @Transactional
+    @Override
+    public void agregarFavorito(int codigoUsuario, int codigoProducto) throws Exception{
+        Producto producto = obtener(codigoProducto);
+        Usuario usuario = usuarioServicio.obtener(codigoUsuario);
+        usuario.getFavoritos().add(producto);
+    }
+
+
+    @Transactional
     @Override
     public void eliminarFavorito(int codigoUsuario, int codigoProducto) throws Exception{
 
         Producto producto = obtener(codigoProducto);
         Usuario usuario = usuarioServicio.obtener(codigoUsuario);
-
-        List<Producto> lista = productoRepo.listarFavoritos(codigoUsuario);
-        lista.remove(producto);
-        usuario.setFavoritos(lista);
-
-        //usuario.getFavoritos().remove(producto);
+        usuario.getFavoritos().remove(producto);
     }
 
     private ProductoGetDTO convertir(Producto producto){

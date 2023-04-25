@@ -111,6 +111,7 @@ public class UsuarioTest {
         //Se verifica en el correo, asunto y mensaje ok
     }
 
+    /* Eliminar
     @Test
     @Sql("classpath:dataset.sql")
     public void crearFavoritoTest() throws Exception{
@@ -124,5 +125,7 @@ public class UsuarioTest {
         //En la base de datos el usuario 1 tiene 2 favoritos, con el que se acaba de agregar quedan 3
         Assertions.assertEquals(3,lista.size());
     }
+
+     */
 
 }

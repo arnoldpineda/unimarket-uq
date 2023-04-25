@@ -41,9 +41,9 @@ public class UsuarioControlador {
 
 
 
-    @PutMapping("/agregar_favorito/")
-    public ResponseEntity<MensajeDTO> obtenerUsuario(@RequestBody FavoritoDTO favoritoDTO) throws Exception {
-        usuarioServicio.agregarFavorito(favoritoDTO);
+    @PutMapping("/agregar_favorito/{codigoUsuario}/{codigoProducto}")
+    public ResponseEntity<MensajeDTO> obtenerUsuario(@PathVariable int codigoUsuario, @PathVariable int codigoProducto) throws Exception {
+        productoServicio.agregarFavorito(codigoUsuario, codigoProducto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new MensajeDTO(HttpStatus.CREATED, false, "Producto agregado a favoritos"));
     }
 
@@ -53,7 +53,7 @@ public class UsuarioControlador {
         return ResponseEntity.status(HttpStatus.OK).body( new MensajeDTO(HttpStatus.OK, false, productoServicio.listarProductosFavoritos(codigoUsuario)));
     }
 
-    /*
+
     //desde la clase producto servicio
     @DeleteMapping("/eliminar_favorito/{codigoUsuario}/{codigoProducto}")
     public ResponseEntity<MensajeDTO> eliminarFavorito(@PathVariable int codigoUsuario, @PathVariable int codigoProducto) throws Exception{
@@ -61,16 +61,7 @@ public class UsuarioControlador {
         return ResponseEntity.status(HttpStatus.OK).body( new MensajeDTO(HttpStatus.OK, false, "Producto eliminado de favoritos"));
     }
 
-     */
 
-
-
-     //usando Query del repositorio
-    @DeleteMapping("/eliminar_favorito")
-    public ResponseEntity<MensajeDTO> eliminarFavorito(@RequestBody FavoritoDTO favoritoDTO) throws Exception{
-        usuarioServicio.eliminarFavorito(favoritoDTO);
-        return ResponseEntity.status(HttpStatus.OK).body( new MensajeDTO(HttpStatus.OK, false, "Producto eliminado de favoritos"));
-    }
 
      
 
