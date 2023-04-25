@@ -184,6 +184,15 @@ public class ProductoTest {
     }
 
 
+    @Test
+    @Sql("classpath:dataset.sql")
+    public void agrearFavoritoTest() throws Exception{
+        productoServicio.agregarFavorito(1,1);
+        List<ProductoGetDTO> lista = productoServicio.listarProductosFavoritos(1);
+
+        //En la base de datos el usuario 1 tiene 2 favoritos, con el que se acaba de agregar quedan 3
+        Assertions.assertEquals(3,lista.size());
+    }
 
     @Test
     @Sql("classpath:dataset.sql")

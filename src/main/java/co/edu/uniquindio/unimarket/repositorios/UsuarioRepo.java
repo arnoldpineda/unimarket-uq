@@ -14,16 +14,5 @@ public interface UsuarioRepo extends JpaRepository<Usuario, Integer> {
     ("select u from Usuario u where u.email = :correo")
     Usuario buscarUsuario(String correo);
 
-    @Modifying
-    @Transactional
-    @Query(value = "insert into favoritos VALUES (?, ?)", nativeQuery = true)
-    void agregarFavorito( int usuariosCodigo, int favoritosCodigo);
-
-
-    @Modifying
-    @Transactional
-    @Query(value = "delete from favoritos VALUES (?, ?)", nativeQuery = true)
-    void eliminar( int usuariosCodigo, int favoritosCodigo);
-
 
 }
