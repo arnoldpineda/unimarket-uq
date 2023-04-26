@@ -24,17 +24,14 @@ public class AuthController {
     private final SesionServicio sesionServicio;
 
     @PostMapping("/login")
-    public ResponseEntity<MensajeDTO> login(@Valid @RequestBody SesionDTO loginUser){
+    public ResponseEntity<MensajeDTO> login(@Valid @RequestBody SesionDTO loginUser) {
         TokenDTO jwtTokenDto = sesionServicio.login(loginUser);
-        return ResponseEntity.status(HttpStatus.OK).body( new MensajeDTO(HttpStatus.OK, false, jwtTokenDto) );
+        return ResponseEntity.status(HttpStatus.OK).body(new MensajeDTO(HttpStatus.OK, false, jwtTokenDto));
     }
 
     @PostMapping("/crear_cliente")
-    public ResponseEntity<MensajeDTO> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) throws Exception{
+    public ResponseEntity<MensajeDTO> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) throws Exception {
         usuarioServicio.crearUsuario(usuarioDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new MensajeDTO(HttpStatus.CREATED, false, "Cliente creado correctamente")) ;
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MensajeDTO(HttpStatus.CREATED, false, "Cliente creado correctamente"));
     }
-
-
-
 }

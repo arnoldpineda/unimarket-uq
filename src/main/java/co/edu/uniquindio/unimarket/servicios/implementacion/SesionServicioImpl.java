@@ -4,14 +4,12 @@ import co.edu.uniquindio.unimarket.dto.SesionDTO;
 import co.edu.uniquindio.unimarket.dto.TokenDTO;
 import co.edu.uniquindio.unimarket.security.jwt.JwtProvider;
 import co.edu.uniquindio.unimarket.servicios.interfaces.SesionServicio;
-import com.nimbusds.jose.proc.SecurityContext;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,11 +32,5 @@ public class SesionServicioImpl implements SesionServicio {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = jwtService.generateToken(authentication);
         return new TokenDTO(jwtToken);
-
-    }
-
-    @Override
-    public void logout(int codigoUsuario) {
-
     }
 }
