@@ -55,7 +55,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests().requestMatchers("/api/usuario/**", "/api/comentario/**", "/api/queja/**", "/api/compra/**", "/api/imagenes/**").hasAuthority("CLIENTE");
         http.authorizeHttpRequests().requestMatchers("/api/producto/crear_producto/**", "/api/producto/actualizar_producto/**", "/api/producto/eliminar_producto/**").hasAuthority("CLIENTE");
         http.authorizeHttpRequests().requestMatchers("/api/producto/listar_propios/**").hasAuthority("CLIENTE");
-        http.authorizeHttpRequests().requestMatchers("/api/cambiarpassword/**").permitAll();
+        http.authorizeHttpRequests().requestMatchers("/api/password/**").permitAll();
         http.authorizeHttpRequests().requestMatchers("/api/producto/listar_disponibles/**", "/api/producto/obtener/**", "/api/producto/listar_categoria/**", "/api/producto/listar_nombre/**", "/api/producto/listar_precio/**").permitAll().anyRequest().authenticated();
         http.exceptionHandling().authenticationEntryPoint(jwtAuthenticationFilter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
