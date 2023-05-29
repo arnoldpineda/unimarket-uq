@@ -36,4 +36,8 @@ public class UsuarioDTO {
     @NotBlank
     @Length(max = 10, message = "El teléfono debe tener máximo 10 caracteres")
     private String telefono;
+
+    @NotNull
+    @NotBlank
+    private String confirmaPassword;
 }
