@@ -35,6 +35,11 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     public int crearUsuario(UsuarioDTO usuarioDTO) throws Exception {
 
         validarCorreoExiste(usuarioDTO.getEmail()); //valida si el correo ya esta en uso
+
+        if(!usuarioDTO.getConfirmaPassword().equals(usuarioDTO.getPassword())){
+            throw new Exception("La contraseña debe ser igual");
+        }
+
         Usuario usuario = convertirDTO(usuarioDTO);
         List<Producto> favoritos = new ArrayList<Producto>();
         usuario.setFavoritos(favoritos);
